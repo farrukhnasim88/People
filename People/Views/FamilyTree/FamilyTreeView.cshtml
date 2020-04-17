@@ -1,0 +1,78 @@
+﻿@model IEnumerable<People.Models.Person>
+@{
+    ViewData["Title"] = "FamilyTreeView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h1 class=" bg-primary mt-4 text-center">@ViewBag.person  FamilyTree</h1>
+
+
+
+ 
+
+@{
+    if (ViewBag.Children != null)
+    {
+
+        <h3 style="margin-top:25px;">List of Children</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (People.Models.Children child in ViewBag.Children)
+                {
+                    <tr>
+                        <td>@child.FirstName</td>
+                        <td>@child.LastName</td>
+                        <td>@child.Gender</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    }
+
+
+
+
+
+    if (ViewBag.Siblings != null)
+    {
+        <h3 style="margin-top:25px;">List of Siblings</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (People.Models.Sibling sib in ViewBag.Siblings)
+                {
+                    <tr>
+                        <td>@sib.FirstName</td>
+                        <td>@sib.LastName</td>
+                        <td>@sib.Gender</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+
+    }
+
+
+
+}

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<People.Models.Person>
+@{
+    ViewData["Title"] = "Confirmed";
+}
+
+<h1>Married Couples</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpouseId)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @if (item.SpouseId > 0)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                    <td>
+
+
+                        @Html.DisplayFor(modelItem => item.SpouseId)
+
+                    </td>
+                    <td>
+                        <a asp-controller="Children" asp-action="Family" asp-route-id="@item.PersonId" asp-route-sid="@item.SpouseId">Children22</a> |
+                        <a asp-action="Spouse" asp-route-sid="@item.SpouseId" asp-route-id="@item.PersonId"> Spouse</a> 
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

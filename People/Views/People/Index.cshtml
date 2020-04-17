@@ -1,0 +1,74 @@
+﻿@model IEnumerable<People.Models.Person>
+
+@{
+    ViewData["Title"] = "Index";
+    
+}
+
+<h1 class="bg-primary text-center" >List of Singles</h1>
+
+<p>
+    <a class="btn btn-outline-success" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpouseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAlive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    @*@if (item.SpouseId == 0)*@
+    //{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpouseId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAlive)
+            </td>
+            <td>
+                <a class="btn btn-info btn-sm" asp-action="Edit" asp-route-id="@item.PersonId">Edit</a> |
+        <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@item.PersonId">Details</a> |
+        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.PersonId">Delete</a> |
+        <a class="btn btn-warning btn-sm" asp-action="Marry" asp-route-id="@item.PersonId" asp-route-fName="@item.FirstName" asp-route-gender="@item.Gender" asp-route-spouseId="@item.SpouseId">Marry</a> |
+        <a class="btn btn-success btn-sm" asp-controller="Siblings" asp-action="Create" asp-route-id="@item.PersonId">Sibling</a>
+        
+
+            </td>
+        </tr>
+    //}
+}
+    </tbody>
+</table>

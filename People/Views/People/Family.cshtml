@@ -1,0 +1,81 @@
+﻿@model IEnumerable<People.Models.Person>
+@{
+    ViewData["Title"] = "Family";
+}
+
+ 
+<h1 class="bg-primary text-center mt-4">Choose a Person to See Family Tree</h1>
+
+<p>
+    <a class="btn btn-outline-success btn-lg" asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="People" asp-action="Family">
+    <p>
+        First Name: <input type="text" name="SearchString" formmethod="get">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SpouseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAlive)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @*@if (item.SpouseId == 0)*@
+            //{
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SpouseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAlive)
+                </td>
+                <td>
+
+                    <a class="btn btn-success btn-sm" asp-controller="Siblings" asp-action="Siblings" asp-route-id="@item.PersonId">Sibling</a>|
+                    <a class="btn btn-dark btn-sm" asp-controller="Children" asp-action="Kids" asp-route-id="@item.PersonId">Children</a> |
+
+                    <a class="btn btn-info btn-sm" asp-controller="People" asp-action="GetFamilyTree" asp-route-name="@item.FirstName" asp-route-id="@item.PersonId">Family Tree</a>
+                    <a class="btn btn-info btn-sm" asp-controller="People" asp-action="ShowAllDetails" asp-route-personid="@item.PersonId">All Details</a>
+
+                </td>
+            </tr>
+            //}
+        }
+    </tbody>
+</table>
