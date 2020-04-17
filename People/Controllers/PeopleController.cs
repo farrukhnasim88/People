@@ -119,7 +119,7 @@ namespace People.Controllers
              people = _context.Persons.Where(o => o.SpouseId >0).ToList();
             List<PersonViewModels> personViews = new List<PersonViewModels>();
            
-            //Add Comments  xv
+            
             foreach (Person item in people)
             {
                 PersonViewModels pvm = new PersonViewModels();
