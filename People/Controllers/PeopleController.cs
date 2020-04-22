@@ -28,7 +28,7 @@ namespace People.Controllers
                 Person person = _context.Persons.Find(id);
                 string fullName = person.FirstName + " " + person.LastName;
                 ViewBag.person = fullName;
-            var spouse = _context.Persons.Where(i => i.SpouseId== id);
+            
 
             Person p2 = _context.Persons.Single(j => j.SpouseId == id);
 
