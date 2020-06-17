@@ -27,16 +27,11 @@ namespace People.Controllers
            
                 Person person = _context.Persons.Find(id);
                 string fullName = person.FirstName + " " + person.LastName;
-                ViewBag.person = fullName;
-            
-
-            Person p2 = _context.Persons.Single(j => j.SpouseId == id);
-
-            string spouseName = p2.FirstName + " " + p2.LastName;
-            ViewBag.SpouseName = spouseName;
-
-
-            List<Children> children = _context.Children.Where(o => o.PersonId == id).ToList();
+                ViewBag.person = fullName;           
+                Person p2 = _context.Persons.Single(j => j.SpouseId == id);
+                string spouseName = p2.FirstName + " " + p2.LastName;
+                ViewBag.SpouseName = spouseName;
+                List<Children> children = _context.Children.Where(o => o.PersonId == id).ToList();
                 if (children == null)
                 {
                     children = new List<Children>();
@@ -49,15 +44,11 @@ namespace People.Controllers
                 ViewBag.Children = children;
                 ViewBag.Siblings = siblings;
                 return View("~/Views/FamilyTree/FamilyTreeView.cshtml");
-            
-           
+                    
             
         }
 
-        
-
-
-        public IActionResult Family (string SearchString)
+                public IActionResult Family (string SearchString)
         {
           
             var people = from m in _context.Persons select m;
@@ -67,11 +58,8 @@ namespace People.Controllers
                 people = people.Where(s => s.FirstName.Contains(SearchString));
 
             }
-            
-            
+                       
                 return View(people.ToList());
-            
-
         }
 
         public async Task<IActionResult> Detail(int? id, string spousename , string firstname)
@@ -170,14 +158,9 @@ namespace People.Controllers
                 personViews.Add(pvm);
 
             }
-
-
-
             return View("~/Views/People/Spouse.cshtml", personViews.ToList());
         }
-
-
-
+        
         public IActionResult Marry(string fName, int id, string gender, int spouseId)
         {
             ViewBag.id = id;
@@ -194,7 +177,6 @@ namespace People.Controllers
             {
                 oppGenderPersonUnMarried = _context.Persons.Where(o => o.IsAlive == true && o.SpouseId == 0 && o.Gender == "male").ToList();
             }
-
 
             return View(oppGenderPersonUnMarried);
         }

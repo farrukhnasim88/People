@@ -18,9 +18,6 @@ namespace People.Controllers
         {
             _context = context;
         }
-
-
-
         public IActionResult Siblings(int id)
         {
             List<Sibling> siblings = new List<Sibling>();
@@ -30,8 +27,6 @@ namespace People.Controllers
 
 
         }
-
-
 
         // GET: Siblings
         public async Task<IActionResult> Index(int id)

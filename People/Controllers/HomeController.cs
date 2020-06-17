@@ -21,7 +21,7 @@ namespace People.Controllers
         public IActionResult Index()
         {
             return RedirectToAction("Index", "People");
-            //return View();
+            
         }
 
         public IActionResult Privacy()

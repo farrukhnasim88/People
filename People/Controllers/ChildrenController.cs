@@ -34,15 +34,11 @@ namespace People.Controllers
         public IActionResult Family(int id, int sid)
         {
             List<Person> persons = new List<Person>();
-            //Person p1 = new Person();
-           // p1 = _context.Persons.Where(p => p.SpouseId == id);
             persons = _context.Persons.Where(o => o.SpouseId == id).ToList();
-                
             List<Children> childrens = new List<Children>();
-
             childrens= _context.Children.Where(c => c.PersonId==id ).ToList();
             return View("~/Views/Children/index.cshtml", childrens);
-
+            
         }
 
 
