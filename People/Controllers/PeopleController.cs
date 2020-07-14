@@ -12,7 +12,7 @@ using People.Controllers;
 
 namespace People.Controllers
 {
-    public class PeopleController : BaseController
+    public class PeopleController : Controller
     {
         private readonly PeopleContext _context;
 
