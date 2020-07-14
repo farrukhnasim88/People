@@ -24,8 +24,8 @@ namespace People.Controllers
 
         public IActionResult GetFamilyTree(int id)
         {
-           
-                Person person = _context.Persons.Find(id);
+            var a = _context.Persons.Where(o => o.PersonId == id).Include(o => o.Children).Include(o => o.Siblings).FirstOrDefault();
+            Person person = _context.Persons.Find(id);
                 string fullName = person.FirstName + " " + person.LastName;
                 ViewBag.person = fullName;           
                 Person p2 = _context.Persons.Single(j => j.SpouseId == id);
@@ -44,85 +44,43 @@ namespace People.Controllers
                 ViewBag.Children = children;
                 ViewBag.Siblings = siblings;
                 return View("~/Views/FamilyTree/FamilyTreeView.cshtml");
-                    
+                 
             
         }
 
-                public IActionResult Family (string SearchString)
-        {
+         public IActionResult Family (string SearchString)
+         {
           
-            var people = from m in _context.Persons select m;
+                var people = from m in _context.Persons.Where(p => p.SpouseId>0)
+                             select m;
+            
+                if (!String.IsNullOrEmpty(SearchString))
+                {
+                     people = people.Where(s => s.FirstName.Contains(SearchString));
 
-            if (!String.IsNullOrEmpty(SearchString))
-            {
-                people = people.Where(s => s.FirstName.Contains(SearchString));
-
-            }
+                }
                        
                 return View(people.ToList());
-        }
+         }       
 
-        public async Task<IActionResult> Detail(int? id, string spousename , string firstname)
-        {
-            ViewBag.spousename = spousename;
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var person = await _context.Persons
-                .Include(s => s.Children)
-          // .ThenInclude(e => e.Siblings)
-        .AsNoTracking()
-
-                .FirstOrDefaultAsync(m => m.PersonId == id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            return View(person);
-        }
-
-
-
-        // GET: People/Edit/5
-        public async Task<IActionResult> Edits(int? id, string spousename, string firstname)
-        {
-            ViewBag.name = spousename;
-            ViewBag.firstname = firstname;
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var person = await _context.Persons.FindAsync(id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-            return View(person);
-        }
-
-
-        public IActionResult MarriedCouples()
+        
+        public async Task<IActionResult> MarriedCouples()
         {
             List<Person> people = new List<Person>();
-             people = _context.Persons.Where(o => o.SpouseId >0).ToList();
+             people = await _context.Persons.Where(o => o.SpouseId >0).ToListAsync();
             List<PersonViewModels> personViews = new List<PersonViewModels>();
            
             
-            foreach (Person item in people)
+            foreach (Person p in people)
             {
                 PersonViewModels pvm = new PersonViewModels();
-                pvm.PresonId = item.PersonId;
-                pvm.FirstName = item.FirstName;
-                pvm.LastName = item.LastName;
-                pvm.Age = item.Age;
-                pvm.Gender = item.Gender;
-                pvm.IsAlive = item.IsAlive;
-                Person person = _context.Persons.FirstOrDefault(o => o.PersonId == item.SpouseId);
+                pvm.PresonId = p.PersonId;
+                pvm.FirstName = p.FirstName;
+                pvm.LastName = p.LastName;
+                pvm.Age = p.Age;
+                pvm.Gender = p.Gender;
+                pvm.IsAlive = p.IsAlive;
+                Person person = _context.Persons.FirstOrDefault(o => o.PersonId == p.SpouseId);
                 pvm.SpouseName = person.FirstName + " " + person.LastName;
 
                 personViews.Add(pvm);
@@ -132,28 +90,29 @@ namespace People.Controllers
             return View("~/Views/People/Spouse.cshtml", personViews.ToList());
         }
 
-        public IActionResult Confirmed(int id1, int id2)
+        public async Task<IActionResult> Confirmed(int id1, int id2)
         {
-            Person firstPerson = _context.Persons.Find(id1);
-            Person secondPerson = _context.Persons.Find(id2);
+            Person firstPerson = await _context.Persons.FindAsync(id1);
+            Person secondPerson = await _context.Persons.FindAsync(id2);
             firstPerson.SpouseId = secondPerson.PersonId;
             secondPerson.SpouseId = firstPerson.PersonId;
              _context.SaveChanges();
 
-            List<Person> people =  _context.Persons.ToList();
+            List<Person> people = await _context.Persons.ToListAsync();
+
             List<PersonViewModels> personViews = new List<PersonViewModels>();
 
-            foreach (Person item in people)
+            foreach (Person person in people)
             {
                 PersonViewModels pvm = new PersonViewModels();
-                pvm.PresonId = item.PersonId;
-                pvm.FirstName = item.FirstName;
-                pvm.LastName = item.LastName;
-                pvm.Age = item.Age;
-                pvm.Gender = item.Gender;
-                pvm.IsAlive = item.IsAlive;
-                Person person = _context.Persons.FirstOrDefault(o => o.PersonId == item.SpouseId);
-                pvm.SpouseName = person.FirstName + " " + person.LastName;
+                pvm.PresonId = person.PersonId;
+                pvm.FirstName = person.FirstName;
+                pvm.LastName = person.LastName;
+                pvm.Age = person.Age;
+                pvm.Gender = person.Gender;
+                pvm.IsAlive = person.IsAlive;
+                Person marriedPerson = _context.Persons.FirstOrDefault(o => o.PersonId == person.SpouseId);
+                pvm.SpouseName = marriedPerson.FirstName + " " + marriedPerson.LastName;
 
                 personViews.Add(pvm);
 
@@ -161,15 +120,17 @@ namespace People.Controllers
             return View("~/Views/People/Spouse.cshtml", personViews.ToList());
         }
         
-        public IActionResult Marry(string fName, int id, string gender, int spouseId)
-        {
-            ViewBag.id = id;
-            ViewBag.FirstName = fName;
 
+        public async Task<IActionResult> Marry(string fName, int id, string gender, int spouseId)
+        {
+
+            ViewBag.id = id;
+            
+            // Create opposit gender list
             List<Person> oppGenderPersonUnMarried = new List<Person>();
             if (gender != null && gender.ToLower() == "male")
             {
-                oppGenderPersonUnMarried = _context.Persons.Where(o => o.IsAlive == true && o.SpouseId == 0 && o.Gender == "Female").ToList();
+                oppGenderPersonUnMarried = await _context.Persons.Where(o => o.IsAlive == true && o.SpouseId == 0 && o.Gender == "Female").ToListAsync();
 
             }
 
@@ -181,14 +142,13 @@ namespace People.Controllers
             return View(oppGenderPersonUnMarried);
         }
 
-        // GET: People
+        // GET: People who are singles
         public async Task<IActionResult> Index()
         {
             List<Person> people = new List<Person>();
-             people= await _context.Persons.Where (o => o.SpouseId == 0).ToListAsync();
-
+            people= await _context.Persons.Where (o => o.SpouseId == 0).ToListAsync();
             return View(people);
-           // return View(await _context.Persons.ToListAsync());
+            
         }
 
         // GET: People/Details/5

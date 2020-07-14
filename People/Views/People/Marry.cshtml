@@ -3,8 +3,10 @@
     ViewData["Title"] = "Marry";
 }
 
-<h1 class="bg-primary text-center"> Choose Partner from the List </h1>
-<p> Please choose from opposit Gender List </p>
+<h1 class=" text-center my-4"> Choose Partner  </h1>
+<p> Please choose Partner from the List. </p>
+ 
+
 
 <table class="table">
     <thead>
@@ -21,7 +23,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Gender)
             </th>
-            
+
             <th></th>
         </tr>
     </thead>
@@ -41,7 +43,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Gender)
                 </td>
-                >
+
                 <td>
                     <a asp-action="Confirmed" asp-route-id1="@item.PersonId" , asp-route-id2="@ViewBag.id">Confirm Marriage</a>
 

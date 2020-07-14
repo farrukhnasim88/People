@@ -31,7 +31,7 @@ namespace People.Controllers
         // GET: Siblings
         public async Task<IActionResult> Index(int id)
         {
-            ViewBag.id = id;
+             
             return View(await _context.Siblings.ToListAsync());
         }
 
@@ -56,6 +56,7 @@ namespace People.Controllers
         // GET: Siblings/Create
         public IActionResult Create(int id)
         {
+            // the id will place in form itself, user does not need to add that
             ViewBag.id = id;
             return View();
         }
