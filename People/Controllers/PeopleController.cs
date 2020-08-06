@@ -24,8 +24,9 @@ namespace People.Controllers
 
         public IActionResult GetFamilyTree(int id)
         {
-            var a = _context.Persons.Where(o => o.PersonId == id).Include(o => o.Children).Include(o => o.Siblings).FirstOrDefault();
-            Person person = _context.Persons.Find(id);
+                 var a = _context.Persons.Where(o => o.PersonId == id).Include(o => o.Children).Include(o => o.Siblings).FirstOrDefault();
+
+                Person person = _context.Persons.Find(id);
                 string fullName = person.FirstName + " " + person.LastName;
                 ViewBag.person = fullName;           
                 Person p2 = _context.Persons.Single(j => j.SpouseId == id);
@@ -90,6 +91,7 @@ namespace People.Controllers
             return View("~/Views/People/Spouse.cshtml", personViews.ToList());
         }
 
+        // Confirm marriage and save in db/ dislplay spouse name in view
         public async Task<IActionResult> Confirmed(int id1, int id2)
         {
             Person firstPerson = await _context.Persons.FindAsync(id1);
@@ -120,13 +122,13 @@ namespace People.Controllers
             return View("~/Views/People/Spouse.cshtml", personViews.ToList());
         }
         
-
+        // Find List of Opposit Gender
         public async Task<IActionResult> Marry(string fName, int id, string gender, int spouseId)
         {
 
             ViewBag.id = id;
             
-            // Create opposit gender list
+             
             List<Person> oppGenderPersonUnMarried = new List<Person>();
             if (gender != null && gender.ToLower() == "male")
             {
@@ -169,7 +171,7 @@ namespace People.Controllers
             return View(person);
         }
 
-        // GET: People/Create
+        // GET: Add Single Person in db
         public IActionResult Create()
         {
             return View();
