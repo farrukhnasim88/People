@@ -6,8 +6,10 @@
     ViewData["Title"] = "Spouse";
 }
 
-<h1 class="bg-primary text-center" >Married Couples with Spouse Name</h1>
-
+<h1 class="bg-primary text-center">Married Couples with Spouse Name</h1>
+ 
+<h2>Congratulations! </h2>
+<p>Here you go this is list of Married Couple</p>
 <table class="table">
     <thead>
         <tr>
@@ -66,7 +68,7 @@
                     @*<a asp-action="Detail" asp-route-id="@item.PresonId" asp-route-spousename="@item.SpouseName" asp-route-firstname="@item.FirstName">Details</a> |*@
 
                     @*<a asp-controller="Children" asp-action="Kids" asp-route-id="@ViewBag.id">Children</a>*@
-                    <a class="btn btn-info" btn-sm asp-controller="Children" asp-action="Create" asp-route-id="@item.PresonId">Children</a>
+                    <a class="btn btn-info" btn-sm asp-controller="Children" asp-action="Create" asp-route-id="@item.PresonId">Add Children</a>
 
                 </td>
             </tr>
