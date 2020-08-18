@@ -21,7 +21,7 @@ namespace People.Controllers
             _context = context;
         }
 
-
+        // Get Person Family Tree
         public IActionResult GetFamilyTree(int id)
         {
                  var a = _context.Persons.Where(o => o.PersonId == id).Include(o => o.Children).Include(o => o.Siblings).FirstOrDefault();
